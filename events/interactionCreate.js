@@ -32,7 +32,7 @@ module.exports = {
             if (now < expirationTime) {
                 const timeLeft = Math.round((expirationTime - now) / 1000);
                 return interaction.reply({
-                    content: `You cannot use the \`${command.data.name}\` command yet, please wait another <t:${timeLeft}:R>`,
+                    content: `You cannot use the \`${command.data.name}\` command yet, please wait another ${timeLeft} seconds`,
                     ephemeral: true
                 });
             }
