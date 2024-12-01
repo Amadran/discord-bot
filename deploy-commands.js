@@ -27,17 +27,44 @@ for (const folder of commandFolders) {
 
 // prepare REST instance, deploy commands
 const rest = new REST().setToken(CONFIG.TOKEN);
+
+// TODO: can this be redesigned to be invoke-able from the bot?
+const scriptArg = process.argv[2];
 (async () => {
     try {
-        console.log(`Started refreshing ${commands.length} application (/) commands.`);
+        switch (scriptArg) {
+            case 'refresh': {
+                console.log(`Started refreshing ${commands.length} application slash commands.`);
 
-        // the put method is used to fully refresh all commands in the guild with the current set
-        const data = await rest.put(
-            Routes.applicationGuildCommands(CONFIG.CLIENT_ID, CONFIG.GUILD_ID),
-            { body: commands }
-        );
+                // the put method is used to fully refresh all commands in the guild with the current set
+                const data = await rest.put(
+                    Routes.applicationGuildCommands(CONFIG.CLIENT_ID, CONFIG.GUILD_ID),
+                    { body: commands }
+                );
 
-        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+                console.log(`Successfully reloaded ${data.length} application slash commands.`);
+            }
+                break;
+            case 'delete': {
+                const commandId = process.argv[3];
+                
+                // for guild-based commands only
+                console.log(`Started deleting command with ID ${commandId}.`);
+                await rest.delete(Routes.applicationGuildCommand(CONFIG.CLIENT_ID, CONFIG.GUILD_ID, commandId));
+                console.log(`Successfully deleted command with ID ${commandId}.`);
+            }
+                break;
+            case 'delete-all': {
+                // for guild-based commands only
+                console.log(`Started deleting all commands.`);
+                await rest.put(Routes.applicationGuildCommands(CONFIG.CLIENT_ID, CONFIG.GUILD_ID), { body: [] });
+                console.log('Successfully deleted all guild commands.');
+            }
+                break;
+            default:
+                console.error('Error: accepted arguments are "refresh", "delete", and "delete-all".');
+                break;
+        }
     } catch (error) {
         console.error(error);
     }

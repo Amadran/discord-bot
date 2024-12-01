@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, bold } = require('discord.js');
 const queryChoices = ['info', 'mykick', 'ping', 'reload', 'server', 'user']; // TODO: this should be dynamically populated
 const queryResponses = [
     'Info about all of the commands this bot has to offer.',
@@ -34,7 +34,7 @@ module.exports = {
             const queryResponse = queryResponses[queryChoices.indexOf(query)];
             
             try {
-                await interaction.reply({ content: `**Info query response:** \n${queryResponse}`, ephemeral: true });
+                await interaction.reply({ content: bold('Info query response:') + `\n${query}: ${queryResponse}`, ephemeral: true });
             } catch (error) {
                 console.error(error);
             }
