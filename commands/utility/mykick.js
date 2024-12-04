@@ -1,4 +1,12 @@
-const { SlashCommandBuilder, PermissionFlagsBits, InteractionContextType } = require('discord.js');
+const {
+    SlashCommandBuilder,
+    PermissionFlagsBits,
+    InteractionContextType,
+    ButtonBuilder,
+    ButtonStyle,
+    ActionRowBuilder,
+    ActionRow
+} = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,7 +27,40 @@ module.exports = {
         const target = interaction.options.getUser('target');
         const reason = interaction.options.getString('reason') ?? 'No reason provided.';
 
-        await interaction.reply(`Kicking ${target.username} for reason: ${reason}`);
-        await interaction.guild.members.kick(target);
+        const confirm = new ButtonBuilder()
+            .setCustomId('confirm')
+            .setLabel('Confirm Kick')
+            .setStyle(ButtonStyle.Danger);
+        
+        const cancel = new ButtonBuilder()
+            .setCustomId('cancel')
+            .setLabel('Cancel')
+            .setStyle(ButtonStyle.Secondary);
+
+        const row = new ActionRowBuilder()
+            .addComponents(cancel, confirm);
+
+        const response = await interaction.reply({
+            content: `Are you sure you want to kick ${target} for reason ${reason}?`,
+            components: [row]
+        });
+
+        const collectorFilter = i => i.user.id === interaction.user.id;
+
+        try {
+            const confirmation = await response.awaitMessageComponent({ filter: collectorFilter, time: 60000 });
+
+            if (confirmation.customId === 'confirm') {
+                await interaction.guild.members.kick(target);
+                await confirmation.update({ content: `${target.username} has been kicked for reason ${reason}`, components: [] });
+            } else if (confirmation.customId === 'cancel') {
+                await confirmation.update({ content: `Action cancelled`, components: [] });
+            }
+        } catch (error) {
+            await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
+        }
+
+        // await interaction.reply(`Kicking ${target.username} for reason: ${reason}`);
+        // await interaction.guild.members.kick(target);
     }
 }
