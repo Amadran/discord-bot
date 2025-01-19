@@ -4,8 +4,7 @@ const {
     InteractionContextType,
     ButtonBuilder,
     ButtonStyle,
-    ActionRowBuilder,
-    ActionRow
+    ActionRowBuilder
 } = require('discord.js');
 
 module.exports = {
@@ -40,6 +39,7 @@ module.exports = {
         const row = new ActionRowBuilder()
             .addComponents(cancel, confirm);
 
+        // the InteractionResponse to the original ChatInputCommandInteraction with some confirmation buttons
         const response = await interaction.reply({
             content: `Are you sure you want to kick ${target} for reason ${reason}?`,
             components: [row]
@@ -59,8 +59,5 @@ module.exports = {
         } catch (error) {
             await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
         }
-
-        // await interaction.reply(`Kicking ${target.username} for reason: ${reason}`);
-        // await interaction.guild.members.kick(target);
     }
 }

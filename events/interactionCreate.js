@@ -1,4 +1,6 @@
 const { Events, Collection } = require('discord.js');
+const { dbUsersAccepted } = require('../usersAccepted.js');
+const CONFIG = require('../config.json');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -68,6 +70,19 @@ module.exports = {
                 await command.autocomplete(interaction);
             } catch (error) {
                 console.error(error);
+            }
+        } else if (interaction.isButton()) {
+            // permanent button interaction test
+            const logChannel = await interaction.client.channels.fetch(CONFIG.TEST_CHANNEL_ID);
+            const acceptRulesChannel = await interaction.client.channels.fetch(CONFIG.ACCEPT_RULES_CHANNEL_ID);
+            
+            const isAccepted = await dbUsersAccepted.get(interaction.user.id);
+            if (!isAccepted) {
+                dbUsersAccepted.set(interaction.user.id, 1);
+                await interaction.reply({ content: 'You accepted the rules.', ephemeral: true});
+                await logChannel.send(`${interaction.user} has accepted the rules.`);
+            } else {
+                await interaction.reply({ content: 'You\'ve already accepted the rules!', ephemeral: true });
             }
         }
     }
