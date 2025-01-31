@@ -41,6 +41,9 @@ module.exports = {
                 throw new Error('accept-rules channel button message not found or malformed');
             }
         } catch (error) {
+            if (error.code === 'ECONNREFUSED') {
+                console.error('You likely forgot to start the redis container');
+            }
             console.error(error);
             process.exit(1);
         }

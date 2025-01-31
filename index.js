@@ -4,7 +4,12 @@ const path = require('node:path');
 const CONFIG = require('./config.json');
 
 // create a new client instance and custom properties on it
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMembers
+	]
+});
 client.commands = new Collection();
 client.cooldowns = new Collection();
 
