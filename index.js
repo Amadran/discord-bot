@@ -65,10 +65,10 @@ const auditLogCountCache = new Collection();
 client.once(Events.ClientReady, async () => {
     // get logging channel and the whole guild (server)
     try {
-        logChannel = await client.channels.fetch(CONFIG.TEST_CHANNEL_ID);
+		logChannel = await client.channels.fetch(CONFIG.TEST_CHANNEL_ID);
 		generalChannel = await client.channels.fetch(CONFIG.GENERAL_CHANNEL_ID);
-        guildBitterrfly = await client.guilds.fetch(CONFIG.GUILD_ID);
-        const auditLogs = await guildBitterrfly.fetchAuditLogs({ type: AuditLogEvent.MessageDelete });
+		guildBitterrfly = await client.guilds.fetch(CONFIG.GUILD_ID);
+		const auditLogs = await guildBitterrfly.fetchAuditLogs({ type: AuditLogEvent.MessageDelete });
 
 		// console.log(`NUM AUDIT LOGS: ${auditLogs.entries.size}`);
 		// const auditLogsArray = auditLogs.entries.values().toArray();
