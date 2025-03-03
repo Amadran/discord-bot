@@ -15,9 +15,9 @@ const client = new Client({
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildModeration,
         GatewayIntentBits.GuildPresences,
-		GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
-		GatewayIntentBits.MessageContent,
+        GatewayIntentBits.MessageContent,
     ],
     partials: [
         Partials.Message,
@@ -26,10 +26,10 @@ const client = new Client({
     ],
     // TODO: decide how we want to cache messages, for now just cache everything
     makeCache: Options.cacheEverything(),
-	// makeCache: Options.cacheWithLimits({
-	// 	...Options.DefaultMakeCacheSettings,
-	// 	MessageManager: 0,
-	// }),
+    // makeCache: Options.cacheWithLimits({
+    // 	...Options.DefaultMakeCacheSettings,
+    // 	MessageManager: 0,
+    // }),
 });
 
 // How many messages to fetch and cache, starting from the latest, in each channel.
@@ -65,18 +65,18 @@ const auditLogCountCache = new Collection();
 client.once(Events.ClientReady, async () => {
     // get logging channel and the whole guild (server)
     try {
-		logChannel = await client.channels.fetch(CONFIG.TEST_CHANNEL_ID);
-		generalChannel = await client.channels.fetch(CONFIG.GENERAL_CHANNEL_ID);
-		guildBitterrfly = await client.guilds.fetch(CONFIG.GUILD_ID);
-		const auditLogs = await guildBitterrfly.fetchAuditLogs({ type: AuditLogEvent.MessageDelete });
+        logChannel = await client.channels.fetch(CONFIG.TEST_CHANNEL_ID);
+        generalChannel = await client.channels.fetch(CONFIG.GENERAL_CHANNEL_ID);
+        guildBitterrfly = await client.guilds.fetch(CONFIG.GUILD_ID);
+        const auditLogs = await guildBitterrfly.fetchAuditLogs({ type: AuditLogEvent.MessageDelete });
 
-		// console.log(`NUM AUDIT LOGS: ${auditLogs.entries.size}`);
-		// const auditLogsArray = auditLogs.entries.values().toArray();
-		// for (const [entryId, entry] of auditLogs.entries) {
-		// 	// console.log('ENTRY:');
-		// 	// console.log(util.inspect(entry, { depth: 2, colors: true }));
+        // console.log(`NUM AUDIT LOGS: ${auditLogs.entries.size}`);
+        // const auditLogsArray = auditLogs.entries.values().toArray();
+        // for (const [entryId, entry] of auditLogs.entries) {
+        // 	// console.log('ENTRY:');
+        // 	// console.log(util.inspect(entry, { depth: 2, colors: true }));
         //     console.log(`ID: ${entryId}    count: ${entry.extra.count}`);
-		// }
+        // }
 
         populateAuditLogCountCache(auditLogs.entries, auditLogCountCache);
     } catch (error) {
