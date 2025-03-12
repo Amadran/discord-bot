@@ -1,15 +1,35 @@
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const {
+    Client, Options, Collection, GatewayIntentBits, Partials,
+} = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const CONFIG = require('./config.json');
 
 // create a new client instance and custom properties on it
 const client = new Client({
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMembers
-	]
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildModeration,
+        GatewayIntentBits.GuildPresences,
+		GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+		GatewayIntentBits.MessageContent,
+    ],
+    partials: [
+        Partials.Message,
+        Partials.Channel,
+        Partials.Reaction
+    ],
+    // TODO: decide how we want to cache messages, for now just cache everything
+    //      -> could use sweeper to periodically delete "expired" cache items
+    makeCache: Options.cacheEverything(),
+	// makeCache: Options.cacheWithLimits({
+	// 	...Options.DefaultMakeCacheSettings,
+	// 	MessageManager: 0,
+	// }),
 });
+
 client.commands = new Collection();
 client.cooldowns = new Collection();
 

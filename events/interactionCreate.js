@@ -73,7 +73,7 @@ module.exports = {
             }
         } else if (interaction.isButton()) {
             // permanent button interaction test
-            const logChannel = await interaction.client.channels.fetch(CONFIG.TEST_CHANNEL_ID);
+            const logChannel = await interaction.client.channels.fetch(CONFIG.LOG_CHANNEL_ID);
             const acceptRulesChannel = await interaction.client.channels.fetch(CONFIG.ACCEPT_RULES_CHANNEL_ID);
             
             const isAccepted = await dbUsersAccepted.get(interaction.user.id);
