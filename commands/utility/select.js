@@ -5,7 +5,7 @@ const {
     StringSelectMenuOptionBuilder,
     MentionableSelectMenuBuilder
 } = require('discord.js');
-const { isSnowflake } = require('../../util.js');
+const { isSnowflake } = require('../../util/misc.js');
 const CONFIG = require('../../config.json');
 
 module.exports = {

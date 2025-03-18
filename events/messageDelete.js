@@ -1,5 +1,5 @@
 const { Events, AuditLogEvent, bold, messageLink } = require('discord.js');
-const { createSimpleTimestampString } = require('../util.js');
+const { createSimpleTimestampString } = require('../util/misc.js');
 const { auditLogCache } = require('../auditLogCache.js');
 
 module.exports = {
@@ -7,16 +7,13 @@ module.exports = {
     once: false,
     async execute(message) {
         const timestamp = Date.now();
-
-        // TODO: log createdTimestamp of message
+        console.log('Message deleted');
 
         try {
             if (!message.guild || message.partial) {
-                return logChannel.send(`A message with ID ${message.id} that was a DM or partial was just deleted.`);
+                return logChannel.send(`A message with ID ${message.id} that was a DM or partial message was just deleted.`);
             }
-            console.log('delete single');
 
-            // fetching audit log is delayed to increase certainty that the log just created is retrieved
             const fetchDelayInterval = 0;
             const totalFetchDelayTime = 2000;
             await messageDeleteHandle(message, timestamp, fetchDelayInterval, totalFetchDelayTime);

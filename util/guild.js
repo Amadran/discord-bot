@@ -1,4 +1,4 @@
-const CONFIG = require('./config.json');
+const CONFIG = require('../config.json');
 
 async function getGeneralChannel(client) {
     return client.channels.fetch(CONFIG.GENERAL_CHANNEL_ID);

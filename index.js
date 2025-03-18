@@ -21,13 +21,15 @@ const client = new Client({
         Partials.Channel,
         Partials.Reaction
     ],
-    // TODO: decide how we want to cache messages, for now just cache everything
-    //      -> could use sweeper to periodically delete "expired" cache items
     makeCache: Options.cacheEverything(),
-	// makeCache: Options.cacheWithLimits({
-	// 	...Options.DefaultMakeCacheSettings,
-	// 	MessageManager: 0,
-	// }),
+	// TODO: determine if we want to sweep anything else
+	sweepers: {
+		...Options.DefaultSweeperSettings,
+		messages: {
+			interval: 60 * 60 * 24, // 1 day in seconds
+			lifetime: 60 * 60 * 24 * 30, // 30 days in seconds
+		},
+	},
 });
 
 client.commands = new Collection();
